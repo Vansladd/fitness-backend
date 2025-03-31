@@ -13,6 +13,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth.hashers import make_password
+from django.utils.timezone import now
 
 
 
@@ -53,7 +54,18 @@ class StepRecordViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return StepRecord.objects.filter(user=self.request.user)
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        user = self.request.user
+        today = now().date()
+        existing_record = StepRecord.objects.filter(user=user, date=today).first()
+
+        if existing_record:
+            # Update the existing record instead of creating a new one
+            existing_record.steps = serializer.validated_data.get("steps", existing_record.steps)
+            existing_record.weight = serializer.validated_data.get("weight", existing_record.weight)
+            existing_record.save()
+        else:
+            # If no existing record, create a new one with today's date
+            serializer.save(user=user, date=today)
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
