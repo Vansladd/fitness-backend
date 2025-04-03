@@ -12,3 +12,10 @@ class StepRecord(models.Model):
 
     def caloriesburned(self):
         return round(self.steps * self.weight * 0.03,2)
+    
+class Workouts(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    Workout_name = models.TextField(blank=False)
+    sets = models.PositiveIntegerField()
+    reps = models.PositiveIntegerField()
+    date = models.DateField(auto_now_add=True)

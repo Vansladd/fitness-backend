@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # Get the user you want to generate data for (you can modify this as needed)
-        user = User.objects.get(username="taiwo1")  # Change this to get the specific user
+        user = User.objects.get(username="taiwo")  # Change this to get the specific user
 
         if not user:
             self.stdout.write(self.style.ERROR("No users found"))
