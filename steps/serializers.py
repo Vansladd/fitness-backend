@@ -11,11 +11,13 @@ class StepRecordSerializer(serializers.ModelSerializer):
         read_only_fields = ['user']
 
 class UserSerializer(serializers.ModelSerializer):
+    avatar = serializers.CharField(source="profile.avatar")
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['username', 'email','avatar']
 class WorkoutSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workouts
-        fields = {"__all__"}
+        fields = "__all__"
+        read_only_fiields = ["user"]
         
